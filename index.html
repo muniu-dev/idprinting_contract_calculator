@@ -62,6 +62,48 @@
             opacity: 0.8;
         }
         
+        /* Moved supplier tab styling up */
+        .supplier-tab {
+            background-color: var(--light-color);
+            padding: 12px 20px;
+            text-align: center;
+            margin: 15px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--primary-color);
+            transition: background-color 0.3s;
+        }
+        
+        .supplier-tab:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .supplier-info {
+            display: none;
+            padding: 20px;
+            background-color: var(--supplier-bg);
+            border-radius: 4px;
+            margin: 0 20px 15px 20px;
+        }
+        
+        .supplier-info.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        .supplier-info-row {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        
+        .supplier-info-label {
+            font-weight: 600;
+            min-width: 150px;
+            color: var(--primary-color);
+        }
+        
         .calculator {
             display: flex;
             flex-direction: column;
@@ -231,48 +273,6 @@
             margin-bottom: 8px;
         }
         
-        /* Supplier Information Tab */
-        .supplier-tab {
-            background-color: var(--light-color);
-            padding: 12px 20px;
-            text-align: center;
-            margin-top: 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--primary-color);
-            transition: background-color 0.3s;
-        }
-        
-        .supplier-tab:hover {
-            background-color: var(--secondary-color);
-            color: white;
-        }
-        
-        .supplier-info {
-            display: none;
-            padding: 20px;
-            background-color: var(--supplier-bg);
-            border-radius: 4px;
-            margin-top: 10px;
-        }
-        
-        .supplier-info.active {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
-        
-        .supplier-info-row {
-            display: flex;
-            margin-bottom: 8px;
-        }
-        
-        .supplier-info-label {
-            font-weight: 600;
-            min-width: 150px;
-            color: var(--primary-color);
-        }
-        
         footer {
             text-align: center;
             padding: 15px;
@@ -310,6 +310,38 @@
         <header>
             <h1>ID Card Printing Contract Calculator</h1>
         </header>
+        
+        <!-- Moved supplier tab to just below the header -->
+        <div class="supplier-tab" id="supplierTab">
+            Click to View Supplier Information
+        </div>
+        
+        <div class="supplier-info" id="supplierInfo">
+            <div class="supplier-info-row">
+                <div class="supplier-info-label">Company Name:</div>
+                <div>Dmwafrika Ventures</div>
+            </div>
+            <div class="supplier-info-row">
+                <div class="supplier-info-label">Contact Person:</div>
+                <div>Dennis Murithi</div>
+            </div>
+            <div class="supplier-info-row">
+                <div class="supplier-info-label">Office Number:</div>
+                <div>0712732841</div>
+            </div>
+            <div class="supplier-info-row">
+                <div class="supplier-info-label">Phone Number:</div>
+                <div>0115105711</div>
+            </div>
+            <div class="supplier-info-row">
+                <div class="supplier-info-label">E-mail:</div>
+                <div>dmwafrikaduka@gmail.com</div>
+            </div>
+            <div class="supplier-info-row">
+                <div class="supplier-info-label">Company Address:</div>
+                <div>Tea Room, Accra Rd + Dubois Rd Junction, Superior Arcade 6th Floor</div>
+            </div>
+        </div>
         
         <div class="calculator">
             <div class="input-section">
@@ -390,37 +422,6 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="supplier-tab" id="supplierTab">
-                    Click to View Supplier Information
-                </div>
-                
-                <div class="supplier-info" id="supplierInfo">
-                    <div class="supplier-info-row">
-                        <div class="supplier-info-label">Company Name:</div>
-                        <div>Dmwafrika Ventures</div>
-                    </div>
-                    <div class="supplier-info-row">
-                        <div class="supplier-info-label">Contact Person:</div>
-                        <div>Dennis Murithi</div>
-                    </div>
-                    <div class="supplier-info-row">
-                        <div class="supplier-info-label">Office Number:</div>
-                        <div>0712732841</div>
-                    </div>
-                    <div class="supplier-info-row">
-                        <div class="supplier-info-label">Phone Number:</div>
-                        <div>0115105711</div>
-                    </div>
-                    <div class="supplier-info-row">
-                        <div class="supplier-info-label">E-mail:</div>
-                        <div>dmwafrikaduka@gmail.com</div>
-                    </div>
-                    <div class="supplier-info-row">
-                        <div class="supplier-info-label">Company Address:</div>
-                        <div>Tea Room, Accra Rd + Dubois Rd Junction, Superior Arcade 6th Floor</div>
-                    </div>
-                </div>
             </div>
         </div>
         
@@ -435,17 +436,19 @@
             const results = document.getElementById('results');
             const supplierTab = document.getElementById('supplierTab');
             const supplierInfo = document.getElementById('supplierInfo');
+            const numCardsInput = document.getElementById('numCards');
+            const myPriceInput = document.getElementById('myPrice');
             
             // Format number with commas
             function formatNumber(num) {
                 return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
             
-            // Calculate button event
-            calculateBtn.addEventListener('click', function() {
+            // Calculate function
+            function calculateContract() {
                 // Get input values
-                const numCards = parseInt(document.getElementById('numCards').value) || 0;
-                const myPrice = parseFloat(document.getElementById('myPrice').value) || 0;
+                const numCards = parseInt(numCardsInput.value) || 0;
+                const myPrice = parseFloat(myPriceInput.value) || 0;
                 const supplierPrice = 230; // Fixed supplier price
                 
                 // Validate inputs
@@ -475,7 +478,21 @@
                 
                 // Show results
                 results.classList.add('active');
-            });
+            }
+            
+            // Calculate button event
+            calculateBtn.addEventListener('click', calculateContract);
+            
+            // Add keyboard support for Enter key
+            function handleKeyPress(event) {
+                if (event.key === 'Enter') {
+                    calculateContract();
+                }
+            }
+            
+            // Add event listeners for Enter key
+            numCardsInput.addEventListener('keypress', handleKeyPress);
+            myPriceInput.addEventListener('keypress', handleKeyPress);
             
             // Supplier tab toggle
             supplierTab.addEventListener('click', function() {
