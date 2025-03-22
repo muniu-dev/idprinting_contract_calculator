@@ -11,6 +11,13 @@
             --highlight-color: #e74c3c;
             --light-color: #ecf0f1;
             --success-color: #27ae60;
+            --background-color: #f5f7fa;
+            --text-color: #333;
+            --card-bg: white;
+            --input-bg: white;
+            --border-color: #ddd;
+            --supplier-bg: #f8f9fa;
+            --partner-bg: #f8f9fa;
         }
         
         * {
@@ -21,16 +28,17 @@
         }
         
         body {
-            background-color: #f5f7fa;
-            color: #333;
+            background-color: var(--background-color);
+            color: var(--text-color);
             line-height: 1.6;
             padding: 20px;
+            transition: all 0.3s ease;
         }
         
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background-color: white;
+            background-color: var(--card-bg);
             border-radius: 8px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             overflow: hidden;
@@ -41,6 +49,7 @@
             color: white;
             padding: 20px;
             text-align: center;
+            position: relative;
         }
         
         h1 {
@@ -80,9 +89,11 @@
         input {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
             font-size: 1rem;
+            background-color: var(--input-bg);
+            color: var(--text-color);
         }
         
         input:focus {
@@ -92,7 +103,7 @@
         }
         
         .supplier-cost {
-            background-color: #f8f9fa;
+            background-color: var(--supplier-bg);
             padding: 10px;
             border-left: 4px solid var(--highlight-color);
             margin-bottom: 15px;
@@ -127,7 +138,7 @@
         }
         
         .result-card {
-            background-color: white;
+            background-color: var(--card-bg);
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
@@ -150,7 +161,7 @@
             justify-content: space-between;
             margin-bottom: 10px;
             padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border-color);
         }
         
         .result-row:last-child {
@@ -184,7 +195,7 @@
         }
         
         .partner-card {
-            background-color: #f8f9fa;
+            background-color: var(--partner-bg);
             border-radius: 6px;
             padding: 15px;
             text-align: center;
@@ -200,6 +211,66 @@
             font-size: 1.5rem;
             font-weight: 700;
             color: var(--success-color);
+        }
+        
+        .payment-schedule {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .payment-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .payment-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        /* Supplier Information Tab */
+        .supplier-tab {
+            background-color: var(--light-color);
+            padding: 12px 20px;
+            text-align: center;
+            margin-top: 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--primary-color);
+            transition: background-color 0.3s;
+        }
+        
+        .supplier-tab:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .supplier-info {
+            display: none;
+            padding: 20px;
+            background-color: var(--supplier-bg);
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        
+        .supplier-info.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        .supplier-info-row {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        
+        .supplier-info-label {
+            font-weight: 600;
+            min-width: 150px;
+            color: var(--primary-color);
         }
         
         footer {
@@ -222,6 +293,14 @@
             
             .profit-split {
                 grid-template-columns: 1fr;
+            }
+            
+            .supplier-info-row {
+                flex-direction: column;
+            }
+            
+            .supplier-info-label {
+                margin-bottom: 4px;
             }
         }
     </style>
@@ -297,6 +376,49 @@
                                 <div class="partner-amount">KSh <span id="resultPartner2">100,000</span></div>
                             </div>
                         </div>
+                        
+                        <div class="payment-schedule">
+                            <div class="payment-title">Supplier Payment Schedule:</div>
+                            <div class="payment-item">
+                                <div>Initial Payment (50%):</div>
+                                <div>KSh <span id="resultInitialPayment">23,000</span></div>
+                            </div>
+                            <div class="payment-item">
+                                <div>Final Payment (50%):</div>
+                                <div>KSh <span id="resultFinalPayment">23,000</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="supplier-tab" id="supplierTab">
+                    Click to View Supplier Information
+                </div>
+                
+                <div class="supplier-info" id="supplierInfo">
+                    <div class="supplier-info-row">
+                        <div class="supplier-info-label">Company Name:</div>
+                        <div>Dmwafrika Ventures</div>
+                    </div>
+                    <div class="supplier-info-row">
+                        <div class="supplier-info-label">Contact Person:</div>
+                        <div>Dennis Murithi</div>
+                    </div>
+                    <div class="supplier-info-row">
+                        <div class="supplier-info-label">Office Number:</div>
+                        <div>0712732841</div>
+                    </div>
+                    <div class="supplier-info-row">
+                        <div class="supplier-info-label">Phone Number:</div>
+                        <div>0115105711</div>
+                    </div>
+                    <div class="supplier-info-row">
+                        <div class="supplier-info-label">E-mail:</div>
+                        <div>dmwafrikaduka@gmail.com</div>
+                    </div>
+                    <div class="supplier-info-row">
+                        <div class="supplier-info-label">Company Address:</div>
+                        <div>Tea Room, Accra Rd + Dubois Rd Junction, Superior Arcade 6th Floor</div>
                     </div>
                 </div>
             </div>
@@ -311,12 +433,15 @@
         document.addEventListener('DOMContentLoaded', function() {
             const calculateBtn = document.getElementById('calculateBtn');
             const results = document.getElementById('results');
+            const supplierTab = document.getElementById('supplierTab');
+            const supplierInfo = document.getElementById('supplierInfo');
             
             // Format number with commas
             function formatNumber(num) {
                 return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
             
+            // Calculate button event
             calculateBtn.addEventListener('click', function() {
                 // Get input values
                 const numCards = parseInt(document.getElementById('numCards').value) || 0;
@@ -334,6 +459,8 @@
                 const supplierTotal = numCards * supplierPrice;
                 const totalProfit = totalValue - supplierTotal;
                 const partnerShare = totalProfit / 2;
+                const initialPayment = supplierTotal / 2;
+                const finalPayment = supplierTotal / 2;
                 
                 // Update results
                 document.getElementById('resultNumCards').textContent = formatNumber(numCards);
@@ -343,9 +470,22 @@
                 document.getElementById('resultTotalProfit').textContent = formatNumber(totalProfit);
                 document.getElementById('resultPartner1').textContent = formatNumber(partnerShare);
                 document.getElementById('resultPartner2').textContent = formatNumber(partnerShare);
+                document.getElementById('resultInitialPayment').textContent = formatNumber(initialPayment);
+                document.getElementById('resultFinalPayment').textContent = formatNumber(finalPayment);
                 
                 // Show results
                 results.classList.add('active');
+            });
+            
+            // Supplier tab toggle
+            supplierTab.addEventListener('click', function() {
+                supplierInfo.classList.toggle('active');
+                
+                if (supplierInfo.classList.contains('active')) {
+                    supplierTab.textContent = 'Hide Supplier Information';
+                } else {
+                    supplierTab.textContent = 'Click to View Supplier Information';
+                }
             });
         });
     </script>
