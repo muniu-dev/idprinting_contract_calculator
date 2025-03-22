@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ID Card Printing Contract Calculator</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --highlight-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --success-color: #27ae60;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .calculator {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        
+        .input-section {
+            background-color: var(--light-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+        
+        .supplier-cost {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-left: 4px solid var(--highlight-color);
+            margin-bottom: 15px;
+        }
+        
+        .calculate-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .calculate-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .results {
+            padding: 20px;
+            display: none;
+        }
+        
+        .results.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        .result-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 20px;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .result-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .result-label {
+            font-weight: 500;
+        }
+        
+        .result-value {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .highlight {
+            color: var(--highlight-color);
+        }
+        
+        .success {
+            color: var(--success-color);
+        }
+        
+        .profit-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .partner-card {
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .partner-title {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .partner-amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--success-color);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 0.8rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 0;
+            }
+            
+            .profit-split {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ID Card Printing Contract Calculator</h1>
+        </header>
+        
+        <div class="calculator">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="numCards">Number of Cards:</label>
+                    <input type="number" id="numCards" placeholder="Enter number of cards" min="1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="myPrice">Your Selling Price per Card (KSh):</label>
+                    <input type="number" id="myPrice" placeholder="Enter your price per card" min="230">
+                </div>
+                
+                <div class="supplier-cost">
+                    <label>Supplier's Cost per Card:</label>
+                    <div><strong>KSh 230</strong> (Fixed price including branded lanyard and card holder)</div>
+                </div>
+                
+                <button class="calculate-btn" id="calculateBtn">Calculate Contract</button>
+            </div>
+            
+            <div class="results" id="results">
+                <div class="result-card">
+                    <div class="card-header">Contract Summary</div>
+                    <div class="card-body">
+                        <div class="result-row">
+                            <div class="result-label">Number of Cards:</div>
+                            <div class="result-value" id="resultNumCards">200</div>
+                        </div>
+                        <div class="result-row">
+                            <div class="result-label">Your Price per Card:</div>
+                            <div class="result-value">KSh <span id="resultMyPrice">1,230</span></div>
+                        </div>
+                        <div class="result-row">
+                            <div class="result-label">Supplier's Price per Card:</div>
+                            <div class="result-value">KSh 230</div>
+                        </div>
+                        <div class="result-row">
+                            <div class="result-label">Total Contract Value:</div>
+                            <div class="result-value highlight">KSh <span id="resultTotalValue">246,000</span></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="card-header">Financial Breakdown</div>
+                    <div class="card-body">
+                        <div class="result-row">
+                            <div class="result-label">Supplier's Total Payment:</div>
+                            <div class="result-value">KSh <span id="resultSupplierTotal">46,000</span></div>
+                        </div>
+                        <div class="result-row">
+                            <div class="result-label">Total Profit:</div>
+                            <div class="result-value success">KSh <span id="resultTotalProfit">200,000</span></div>
+                        </div>
+                        
+                        <div class="profit-split">
+                            <div class="partner-card">
+                                <div class="partner-title">Partner 1 Share</div>
+                                <div class="partner-amount">KSh <span id="resultPartner1">100,000</span></div>
+                            </div>
+                            <div class="partner-card">
+                                <div class="partner-title">Partner 2 Share</div>
+                                <div class="partner-amount">KSh <span id="resultPartner2">100,000</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            ID Card Contract Calculator &copy; 2025
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calculateBtn = document.getElementById('calculateBtn');
+            const results = document.getElementById('results');
+            
+            // Format number with commas
+            function formatNumber(num) {
+                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+            
+            calculateBtn.addEventListener('click', function() {
+                // Get input values
+                const numCards = parseInt(document.getElementById('numCards').value) || 0;
+                const myPrice = parseFloat(document.getElementById('myPrice').value) || 0;
+                const supplierPrice = 230; // Fixed supplier price
+                
+                // Validate inputs
+                if (numCards <= 0 || myPrice < supplierPrice) {
+                    alert('Please enter valid values. Number of cards must be positive and your price must be at least KSh 230.');
+                    return;
+                }
+                
+                // Calculate results
+                const totalValue = numCards * myPrice;
+                const supplierTotal = numCards * supplierPrice;
+                const totalProfit = totalValue - supplierTotal;
+                const partnerShare = totalProfit / 2;
+                
+                // Update results
+                document.getElementById('resultNumCards').textContent = formatNumber(numCards);
+                document.getElementById('resultMyPrice').textContent = formatNumber(myPrice);
+                document.getElementById('resultTotalValue').textContent = formatNumber(totalValue);
+                document.getElementById('resultSupplierTotal').textContent = formatNumber(supplierTotal);
+                document.getElementById('resultTotalProfit').textContent = formatNumber(totalProfit);
+                document.getElementById('resultPartner1').textContent = formatNumber(partnerShare);
+                document.getElementById('resultPartner2').textContent = formatNumber(partnerShare);
+                
+                // Show results
+                results.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
